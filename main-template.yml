@@ -1,3 +1,24 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: main-template
+
+Parameters:
+  Parameter1:
+    Type: String
+    Description: Parameter1
+    
+  Parameter2:
+    Type: String
+    Description: Parameter2
+
 Resources:
   Dummy2:
     Type: AWS::CloudFormation::WaitConditionHandle
+
+Outputs:
+  Parameter1Output:
+    Description: Parameter1
+    Value: !Ref Parameter1
+    
+  Parameter2Output:
+    Description: Parameter2
+    Value: !Ref Parameter2
