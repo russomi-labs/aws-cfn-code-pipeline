@@ -1,0 +1,60 @@
+[
+  {
+    "ParameterKey": "PipelineName",
+    "ParameterValue": "github-basic-pipeline"
+  },
+  {
+    "ParameterKey": "S3Bucket",
+    "ParameterValue": ""
+  },
+  {
+    "ParameterKey": "SourceS3Key",
+    "ParameterValue": ""
+  },
+  {
+    "ParameterKey": "TemplateFileName",
+    "ParameterValue": "main-template.yml"
+  },
+  {
+    "ParameterKey": "TestStackConfig",
+    "ParameterValue": "test-main-template.json"
+  },
+  {
+    "ParameterKey": "TestStackName",
+    "ParameterValue": "Test-Stack-Name"
+  },
+  {
+    "ParameterKey": "ProdStackName",
+    "ParameterValue": "Prod-Stack-Name"
+  },
+  {
+    "ParameterKey": "ProdStackConfig",
+    "ParameterValue": "prod-main-template.json"
+  },
+  {
+    "ParameterKey": "ChangeSetName",
+    "ParameterValue": "pipeline-stack-update"
+  },
+  {
+    "ParameterKey": "Email",
+    "ParameterValue": "michael.russo@hpe.com"
+  },
+  {
+    "ParameterKey": "GitHubOwner",
+    "ParameterValue": "russomi"
+  },
+  {
+    "ParameterKey": "GitHubRepo",
+    "ParameterValue": "github-basic-pipeline"
+  },
+  {
+    "ParameterKey": "GitHubBranch",
+    "ParameterValue": "master"
+  },
+  {
+    "ParameterKey": "GitHubToken",
+    "ParameterValue": ""
+  }
+
+]
+
