@@ -244,6 +244,13 @@ Resources:
                   - 'ec2:*'
                 Effect: Allow
                 Resource: '*'
+              - Action:
+                  - "s3:GetObject"
+                  - "s3:ListBucket"
+                Effect: Allow
+                Resource:
+                  - Fn::Sub: arn:aws:s3:::${ArtifactStoreBucket}
+                  - Fn::Sub: arn:aws:s3:::${ArtifactStoreBucket}/*
 
   PipelineRole:
     Type: AWS::IAM::Role
