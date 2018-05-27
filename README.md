@@ -25,3 +25,9 @@ When you push a change to the source repo, the pipeline will trigger.
 * The `ProdStage` will create a changeset for the production stack using the `ProdStackConfig` file.
 * The `ApproveChangeSet` stage is a manual approval to execute the changeset against the production stack.
 * Once approved, the changeset will be executed against the production stack.
+
+
+## TODO
+- [ ] Cross Account Deployments - https://github.com/awslabs/aws-refarch-cross-account-pipeline and 
+  https://aws.amazon.com/blogs/devops/aws-building-a-secure-cross-account-continuous-delivery-pipeline/
+  
