@@ -45,7 +45,7 @@
   },
   {
     "ParameterKey": "GitHubRepo",
-    "ParameterValue": "github-basic-pipeline"
+    "ParameterValue": "aws-cfn-code-pipeline"
   },
   {
     "ParameterKey": "GitHubBranch",
@@ -53,7 +53,7 @@
   },
   {
     "ParameterKey": "GitHubToken",
-    "ParameterValue": ""
+    "ParameterValue": "ENTER TOKEN HERE"
   }
 
 ]
