@@ -1,2 +1,2 @@
-# aws-github-basic-code-pipeline
+# aws-cfn-code-pipeline
 
