@@ -1,2 +1,2 @@
-# github-basic-pipeline
-github-basic-pipeline
+# aws-github-basic-code-pipeline
+
