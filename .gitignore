@@ -53,3 +53,9 @@ fabric.properties
 # Editor-based Rest Client
 .idea/httpRequests
 
+.idea/aws-cfn-code-pipeline.iml
+.idea/encodings.xml
+.idea/inspectionProfiles/
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
