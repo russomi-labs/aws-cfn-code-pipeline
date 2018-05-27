@@ -123,6 +123,23 @@ Resources:
                 - Name: TemplateSource
               RunOrder: 1
 
+        - Name: BuildStage
+          Actions:
+            - Name: CodeBuild
+              InputArtifacts:
+                - Name: TemplateSource
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: 1
+                Provider: CodeBuild
+              OutputArtifacts:
+                - Name: ValidatedTemplateSource
+              Configuration:
+                ProjectName:
+                  Ref: BuildCopyCFNProject
+              RunOrder: 2
+
         - Name: TestStage
           Actions:
             - Name: CreateStack
@@ -132,7 +149,7 @@ Resources:
                 Provider: CloudFormation
                 Version: '1'
               InputArtifacts:
-                - Name: TemplateSource
+                - Name: ValidatedTemplateSource
               Configuration:
                 ActionMode: REPLACE_ON_FAILURE
                 RoleArn: !GetAtt [CFNRole, Arn]
@@ -173,7 +190,7 @@ Resources:
                 Provider: CloudFormation
                 Version: '1'
               InputArtifacts:
-                - Name: TemplateSource
+                - Name: ValidatedTemplateSource
               Configuration:
                 ActionMode: CHANGE_SET_REPLACE
                 RoleArn: !GetAtt [CFNRole, Arn]
@@ -231,6 +248,7 @@ Resources:
   PipelineRole:
     Type: AWS::IAM::Role
     Properties:
+      RoleName: !Sub "CodePipelineRole-${AWS::StackName}"
       AssumeRolePolicyDocument:
         Statement:
         - Action: ['sts:AssumeRole']
@@ -257,5 +275,102 @@ Resources:
                 - 'cloudformation:SetStackPolicy'
                 - 'iam:PassRole'
                 - 'sns:Publish'
+                - "codebuild:StartBuild"
+                - "codebuild:BatchGetBuilds"
                 Effect: Allow
                 Resource: '*'
+
+  CodeBuildRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: !Sub "CodeBuildRole-${AWS::StackName}"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "codebuild.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: /service-role/
+      Policies:
+        -
+          PolicyName: "CodeBuildNestedCFNAccessPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: "Allow"
+                Action:
+                  - "cloudformation:Get*"
+                  - "cloudformation:Describe*"
+                  - "cloudformation:List*"
+                Resource:
+                  - Fn::Sub: arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/Test-${AWS::StackName}*
+              -
+                Effect: "Allow"
+                Action:
+                  - "ec2:Describe*"
+                  - "cloudformation:ValidateTemplate"
+                  - "elasticloadbalancing:Describe*"
+                  - "autoscaling:Describe*"
+                  - "iam:Get*"
+                  - "iam:List*"
+                  - "logs:Describe*"
+                  - "logs:Get*"
+                  - "tag:Get*"
+                Resource:
+                  - "*"
+              -
+                Effect: "Allow"
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource:
+                  - Fn::Sub: arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/*
+              -
+                Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                  - "s3:GetObject"
+                  - "s3:GetObjectVersion"
+                  - "s3:ListBucket"
+                Resource:
+                  - Fn::Sub: arn:aws:s3:::codepipeline-${AWS::Region}-*
+                  - Fn::Sub: arn:aws:s3:::${ArtifactStoreBucket}/*
+                  - Fn::Sub: arn:aws:s3:::${ArtifactStoreBucket}
+
+  BuildCopyCFNProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name:
+        Fn::Sub: BuildCopyCFN-${AWS::StackName}
+      Description: Build to validate and copy CFN templates
+      ServiceRole:
+        Fn::GetAtt: [ CodeBuildRole, Arn ]
+      Artifacts:
+        Type: CODEPIPELINE
+        Name:
+          Fn::Sub: BuildCopyCFN-${AWS::StackName}
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/nodejs:7.0.0
+        EnvironmentVariables:
+          - Name: TEMPLATE_BUCKET
+            Value:
+              Ref: ArtifactStoreBucket
+          - Name: TEMPLATE_PREFIX
+            Value: codebuild
+      Source:
+        Type: CODEPIPELINE
+      TimeoutInMinutes: 15
+      EncryptionKey:
+        Fn::Sub: arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3
+      Tags:
+        - Key: Name
+          Value:
+            Fn::Sub: BuildCopyCFN-${AWS::StackName}

@@ -10,9 +10,9 @@ create the stack.
 
 ```bash
 $ aws cloudformation create-stack --stack-name github-basic-pipeline \
-  --template-body file://github-basic-pipeline.yml \   
-  --parameters file://github-basic-pipeline.json \    
-  --capabilities CAPABILITY_IAM
+  --template-body file://github-basic-pipeline.yml \
+  --parameters file://github-basic-pipeline.json \
+  --capabilities CAPABILITY_NAMED_IAM
 ```
 
 ## Step 3 - Push a change to the source repo to trigger the pipeline
