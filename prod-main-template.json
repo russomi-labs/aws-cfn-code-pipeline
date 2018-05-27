@@ -1,0 +1,6 @@
+{
+  "Parameters" : {
+    "Parameter1": "prod-ParameterValue1",
+    "Parameter2": "prod-ParameterValue2"    
+  }
+}
