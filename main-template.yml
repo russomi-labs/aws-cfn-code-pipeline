@@ -2,6 +2,11 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: main-template
 
 Parameters:
+
+  TemplatePath:
+    Type: String
+    Description: S3Bucket Path where the templates are stored
+
   Parameter1:
     Type: String
     Description: Parameter1
@@ -14,7 +19,26 @@ Resources:
   Dummy2:
     Type: AWS::CloudFormation::WaitConditionHandle
 
+  SecurityStack:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL:
+        Fn::Sub: "https://s3.amazonaws.com/${TemplatePath}/sub-template-nested.yml"
+      Parameters:
+        Parameter1:
+          Ref: Parameter1
+        Parameter2:
+          Ref: Parameter2
+      Tags:
+        - Key: Name
+          Value: sub-template-nested
+
 Outputs:
+
+  Parameter1Output:
+    Description: TemplatePath
+    Value: !Ref TemplatePath
+
   Parameter1Output:
     Description: Parameter1
     Value: !Ref Parameter1

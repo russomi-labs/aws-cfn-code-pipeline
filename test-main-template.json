@@ -1,5 +1,6 @@
 {
   "Parameters" : {
+    "TemplatePath": "TEMPLATE_PATH_PLACEHOLDER",
     "Parameter1": "ParameterValue1",
     "Parameter2": "ParameterValue2"    
   }

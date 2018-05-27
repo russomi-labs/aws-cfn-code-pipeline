@@ -154,8 +154,8 @@ Resources:
                 ActionMode: REPLACE_ON_FAILURE
                 RoleArn: !GetAtt [CFNRole, Arn]
                 StackName: !Ref TestStackName
-                TemplateConfiguration: !Sub "TemplateSource::${TestStackConfig}"
-                TemplatePath: !Sub "TemplateSource::${TemplateFileName}"
+                TemplateConfiguration: !Sub "ValidatedTemplateSource::${TestStackConfig}"
+                TemplatePath: !Sub "ValidatedTemplateSource::${TemplateFileName}"
               RunOrder: '1'
 
             - Name: ApproveTestStack
@@ -196,8 +196,8 @@ Resources:
                 RoleArn: !GetAtt [CFNRole, Arn]
                 StackName: !Ref ProdStackName
                 ChangeSetName: !Ref ChangeSetName
-                TemplateConfiguration: !Sub "TemplateSource::${ProdStackConfig}"
-                TemplatePath: !Sub "TemplateSource::${TemplateFileName}"
+                TemplateConfiguration: !Sub "ValidatedTemplateSource::${ProdStackConfig}"
+                TemplatePath: !Sub "ValidatedTemplateSource::${TemplateFileName}"
               RunOrder: '1'
 
             - Name: ApproveChangeSet
